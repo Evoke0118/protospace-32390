@@ -24,7 +24,7 @@ before_action :move_to_index, only: [:edit]
   def show
     @prototype = Prototype.find(params[:id])      
     @comment = Comment.new
-    @comments = @prototype.comments.includes(:user)  
+    @comments = @prototype.comments.includes(:user)  #ネストの関係を利用 #userモデルとcommentを紐づけている
   end
 
   def edit
@@ -37,12 +37,12 @@ before_action :move_to_index, only: [:edit]
     else
       render :edit
     end
-  end
+  end
 
   def destroy
     prototype = Prototype.find(params[:id])
     prototype.destroy
-    redirect_to root_path
+    redirect_to root_path  #削除出来なかった場合とかの条件分岐はここではいらん
   end
 
   private
@@ -57,4 +57,4 @@ before_action :move_to_index, only: [:edit]
   end
 
 end
-
+  

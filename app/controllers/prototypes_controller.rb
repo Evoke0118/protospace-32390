@@ -1,7 +1,7 @@
 class PrototypesController < ApplicationController
  
 before_action :authenticate_user!, only: [:new, :edit, :destroy]
-before_action :move_to_index, only: [:edit]
+before_action :move_to_index, except: [:index, :show]
 
 
   def index
@@ -28,10 +28,11 @@ before_action :move_to_index, only: [:edit]
   end
 
   def edit
+    @prototype = Prototype.find(params[:id])      
   end
 
   def update
-    @prototype = Prototype.find(params[:id])                                      #@prototype = Prototype.update(prototype_params)
+    @prototype = Prototype.find(params[:id])      #間違えた内容▶︎ @prototype = Prototype.update(prototype_params)
     if @prototype.update(prototype_params)
       redirect_to prototype_path
     else

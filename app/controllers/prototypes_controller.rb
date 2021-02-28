@@ -37,7 +37,7 @@ before_action :move_to_index, only: [:edit]
     else
       render :edit
     end
-  end
+  end
 
   def destroy
     prototype = Prototype.find(params[:id])

@@ -1,11 +1,12 @@
 class PrototypesController < ApplicationController
- 
+
+before_action :set_prototype, except: [:index, :new, :create]
 before_action :authenticate_user!, only: [:new, :edit, :destroy]
-before_action :move_to_index, except: [:index, :show]
+before_action :move_to_index, only: [:edit, :update, :destory]
 
 
   def index
-    @prototypes = Prototype.all
+    @prototypes = Prototype.includes(:user)
   end
 
   def new
@@ -28,11 +29,11 @@ before_action :move_to_index, except: [:index, :show]
   end
 
   def edit
-    @prototype = Prototype.find(params[:id])      
+    #@prototype = Prototype.find(params[:id])      
   end
 
   def update
-    @prototype = Prototype.find(params[:id])      #間違えた内容▶︎ @prototype = Prototype.update(prototype_params)
+    #@prototype = Prototype.find(params[:id])      #間違えた内容▶︎ @prototype = Prototype.update(prototype_params)
     if @prototype.update(prototype_params)
       redirect_to prototype_path
     else
@@ -41,7 +42,7 @@ before_action :move_to_index, except: [:index, :show]
   end
 
   def destroy
-    prototype = Prototype.find(params[:id])
+    #prototype = Prototype.find(params[:id])   
     prototype.destroy
     redirect_to root_path  #削除出来なかった場合とかの条件分岐はここではいらん
   end
@@ -52,9 +53,11 @@ before_action :move_to_index, except: [:index, :show]
   end
 
   def move_to_index
-    unless user_signed_in?
-      redirect_to action: :index
-    end
+    redirect_to root_path unless current_user == @prototype.user
+  end
+
+  def set_prototype
+    @prototype = Prototype.find(params[:id])   
   end
 
 end
